@@ -24,8 +24,8 @@ func (s *SpySleeper) Sleep() {
 
 type DefaultSleeper struct{}
 
-func (d *DefaultSleeper) Sleep() {
-	time.Sleep(1 * time.Second)
+func (s *SpyTime) Sleep(duration time.Duration) {
+	s.durationSlept = duration
 }
 
 type CountdownOperationsSpy struct {
@@ -54,6 +54,19 @@ func Countdown(out io.Writer, sleeper Sleeper) {
 }
 
 func main() {
-	sleeper := &DefaultSleeper{}
+	sleeper := &ConfigurableSleeper{1 * time.Second, time.Sleep}
 	Countdown(os.Stdout, sleeper)
+}
+
+type ConfigurableSleeper struct {
+	duration time.Duration
+	sleep    func(time.Duration)
+}
+
+type SpyTime struct {
+	durationSlept time.Duration
+}
+
+func (c *ConfigurableSleeper) Sleep() {
+	c.sleep(c.duration)
 }
