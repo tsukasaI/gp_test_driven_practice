@@ -61,10 +61,6 @@ func (s *SpyStore) Fetch(ctx context.Context) (string, error) {
 	}
 }
 
-// func (s *SpyStore) Cancel() {
-// 	s.canceled = true
-// }
-
 type SpyStore struct {
 	response string
 	t        *testing.T
@@ -89,38 +85,6 @@ func TestHandler(t *testing.T) {
 		if response.written {
 			t.Error("a response should not have been written")
 		}
-		// store.assertWasNotCanceled()
+
 	})
-
-	// t.Run("tells store to cancel work if request is canceled", func(t *testing.T) {
-	// 	store := &SpyStore{response: data, t: t}
-	// 	svr := Server(store)
-
-	// 	request := httptest.NewRequest(http.MethodGet, "/", nil)
-
-	// 	cancellingCtx, cancel := context.WithCancel(request.Context())
-	// 	time.AfterFunc(5*time.Millisecond, cancel)
-	// 	request = request.WithContext(cancellingCtx)
-
-	// 	response := httptest.NewRecorder()
-
-	// 	svr.ServeHTTP(response, request)
-
-	// 	store.assertWasCanceled()
-	// })
-
 }
-
-// func (s *SpyStore) assertWasCanceled() {
-// 	s.t.Helper()
-// 	if !s.canceled {
-// 		s.t.Error("store was not told to cancel")
-// 	}
-// }
-
-// func (s *SpyStore) assertWasNotCanceled() {
-// 	s.t.Helper()
-// 	if s.canceled {
-// 		s.t.Error("store was told to cancel")
-// 	}
-// }
